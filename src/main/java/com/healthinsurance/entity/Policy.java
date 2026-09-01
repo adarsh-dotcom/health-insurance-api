@@ -115,7 +115,7 @@ public class Policy {
         paymentFrequency = v;
     }
 
-    public String getPolicyStatus(String active) {
+    public String getPolicyStatus() {
         return policyStatus;
     }
 

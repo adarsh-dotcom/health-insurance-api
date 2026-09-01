@@ -1,5 +1,6 @@
 package com.healthinsurance.service;
 
+import com.healthinsurance.dto.CustomerActivePolicyDTO;
 import com.healthinsurance.dto.CustomerResponse;
 import com.healthinsurance.entity.Customer;
 
@@ -21,7 +22,7 @@ public interface CustomerService {
 
     List<CustomerResponse> getCustomersByAgeRange(Integer minAge, Integer maxAge);
 
-    List<Customer> getCustomersWithActivePolicy();
+    List<CustomerActivePolicyDTO> getCustomersWithActivePolicy(Long customerId);
 
     List<CustomerResponse> getCustomersWithNoActivePolicy();
 
