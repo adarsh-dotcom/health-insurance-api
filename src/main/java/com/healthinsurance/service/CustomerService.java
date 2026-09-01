@@ -21,7 +21,7 @@ public interface CustomerService {
 
     List<CustomerResponse> getCustomersByAgeRange(Integer minAge, Integer maxAge);
 
-    List<CustomerResponse> getCustomersWithActivePolicy();
+    List<Customer> getCustomersWithActivePolicy();
 
     List<CustomerResponse> getCustomersWithNoActivePolicy();
 
