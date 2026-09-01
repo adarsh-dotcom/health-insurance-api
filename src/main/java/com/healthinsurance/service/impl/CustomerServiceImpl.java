@@ -605,49 +605,20 @@ public class CustomerServiceImpl implements CustomerService {
      * One customer should appear only ONCE.
      */
     @Override
-    public List<Customer> getCustomersWithActivePolicy() {
+    public List<CustomerActivePolicyDTO> getCustomersWithActivePolicy(
+            Long customerId) {
 
-        Boolean hasActivePolicy;
-        List<Customer> customers = customerRepository.findAll();
+        List<CustomerActivePolicyProjection> results = customerRepository.findActivePolicies(customerId);
 
-        List<Customer> finalResponse = new ArrayList<>();
-
-        for (Customer customer: customers) {
-            hasActivePolicy = false;
-
-            for (Policy policy: customer.getPolicies()) {
-
-                if ("ACTIVE".equals(policy.getPolicyStatus("ACTIVE"))) {
-                    hasActivePolicy = true;
-                    break;
-                }
-            }
-
-            if (hasActivePolicy) {
-                finalResponse.add(customer);
-            }
-        }
-
-        return finalResponse;
-
-//     * 1. Get customers.
-//        * 2. For each customer, get their policies.
-//     *
-//     * 3. Use a second loop for policies.
-//                *
-//                * 4. Create a boolean variable:
-//     *
-//     *       hasActivePolicy
-//                *
-//                * 5. Initially:
-//     *
-//     *       false
-//                *
-//                * 6. If policy status is ACTIVE:
-//     *
-//     *       change flag to true
-
+        return results.stream()
+                .map(result -> new CustomerActivePolicyDTO(
+                        result.getFirstName(),
+                        result.getPolicyNumber(),
+                        result.getPolicyStatus()
+                ))
+                .toList();
     }
+
 
     @Override
     public List<CustomerResponse> getCustomersWithNoActivePolicy() {
@@ -693,7 +664,7 @@ public class CustomerServiceImpl implements CustomerService {
      *
      *       hasActivePolicy = false
      *
-     * 4. If you find ACTIVE:
+     * 4. If you find +:
      *
      *       hasActivePolicy = true
      *

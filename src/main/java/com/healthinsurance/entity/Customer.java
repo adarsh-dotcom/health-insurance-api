@@ -50,18 +50,7 @@ public class    Customer {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Policy> policies;
-
     public Customer() {
-    }
-
-    public List<Policy> getPolicies() {
-        return policies;
-    }
-
-    public void setPolicies(List<Policy> policies) {
-        this.policies = policies;
     }
 
     public Long getCustomerId() {

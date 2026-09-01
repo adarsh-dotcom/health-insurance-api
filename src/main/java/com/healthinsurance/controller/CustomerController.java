@@ -1,5 +1,7 @@
 package com.healthinsurance.controller;
 
+import com.healthinsurance.dto.CustomerActivePolicyDTO;
+import com.healthinsurance.dto.CustomerActivePolicyProjection;
 import com.healthinsurance.dto.CustomerResponse;
 import com.healthinsurance.entity.Customer;
 import com.healthinsurance.service.CustomerService;
@@ -69,9 +71,12 @@ public class CustomerController {
     }
 
     @GetMapping("/with-active-policy")
-    public List<Customer> getCustomersWithActivePolicy() {
-        return service.getCustomersWithActivePolicy();
+    public List<CustomerActivePolicyDTO> getCustomersWithActivePolicy(
+            @RequestParam Long customerId) {
+
+        return service.getCustomersWithActivePolicy(customerId);
     }
+
 
     @GetMapping("/without-active-policy")
     public List<CustomerResponse> getCustomersWithNoActivePolicy() {

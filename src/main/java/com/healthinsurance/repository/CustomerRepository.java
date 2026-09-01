@@ -1,5 +1,6 @@
 package com.healthinsurance.repository;
 
+import com.healthinsurance.dto.CustomerActivePolicyProjection;
 import com.healthinsurance.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,5 +26,22 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     List<Customer> findByStateIgnoreCase(String state);
 
+
+    @Query(
+            value = """
+                SELECT
+                    c.first_name AS firstName,
+                    p.policy_number AS policyNumber,
+                    p.policy_status AS policyStatus
+                FROM customers c
+                JOIN policies p
+                    ON c.customer_id = p.customer_id
+                WHERE c.customer_id = :customerId
+                  AND p.policy_status = 'ACTIVE'
+                """,
+            nativeQuery = true
+    )
+    List<CustomerActivePolicyProjection> findActivePolicies(
+            @Param("customerId") Long customerId);
 
 }
