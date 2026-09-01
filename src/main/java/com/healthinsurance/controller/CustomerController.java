@@ -69,7 +69,7 @@ public class CustomerController {
     }
 
     @GetMapping("/with-active-policy")
-    public List<CustomerResponse> getCustomersWithActivePolicy() {
+    public List<Customer> getCustomersWithActivePolicy() {
         return service.getCustomersWithActivePolicy();
     }
 

@@ -2,9 +2,10 @@ package com.healthinsurance.service.impl;
 
 import com.healthinsurance.dto.*;
 import com.healthinsurance.entity.Customer;
+import com.healthinsurance.entity.Policy;
+import com.healthinsurance.repository.ClaimRepository;
 import com.healthinsurance.repository.CustomerRepository;
 import com.healthinsurance.service.CustomerService;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,9 +18,11 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final ClaimRepository claimRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, ClaimRepository claimRepository) {
         this.customerRepository = customerRepository;
+        this.claimRepository = claimRepository;
     }
 
 
@@ -176,7 +179,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerResponse.setCustomerCode(customer.getCustomerCode());
         customerResponse.setCity(customer.getCity());
         customerResponse.setState(customer.getState());
-        customerResponse.setCustomerStatus(customer.getCustomerStatus());
         customerResponse.setFullName(customer.getFirstName().concat(customer.getLastName()));
 
         return customerResponse;
@@ -603,11 +605,48 @@ public class CustomerServiceImpl implements CustomerService {
      * One customer should appear only ONCE.
      */
     @Override
-    public List<CustomerResponse> getCustomersWithActivePolicy() {
+    public List<Customer> getCustomersWithActivePolicy() {
 
-        // TODO: Implement the business logic yourself.
+        Boolean hasActivePolicy;
+        List<Customer> customers = customerRepository.findAll();
 
-        throw new UnsupportedOperationException("Implement service logic");
+        List<Customer> finalResponse = new ArrayList<>();
+
+        for (Customer customer: customers) {
+            hasActivePolicy = false;
+
+            for (Policy policy: customer.getPolicies()) {
+
+                if ("ACTIVE".equals(policy.getPolicyStatus("ACTIVE"))) {
+                    hasActivePolicy = true;
+                    break;
+                }
+            }
+
+            if (hasActivePolicy) {
+                finalResponse.add(customer);
+            }
+        }
+
+        return finalResponse;
+
+//     * 1. Get customers.
+//        * 2. For each customer, get their policies.
+//     *
+//     * 3. Use a second loop for policies.
+//                *
+//                * 4. Create a boolean variable:
+//     *
+//     *       hasActivePolicy
+//                *
+//                * 5. Initially:
+//     *
+//     *       false
+//                *
+//                * 6. If policy status is ACTIVE:
+//     *
+//     *       change flag to true
+
     }
 
     @Override
@@ -799,7 +838,6 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerResponse> getCustomersWithHighClaimAmount(
             BigDecimal amount) {
 
-        // TODO: Implement the business logic yourself.
 
 
         throw new UnsupportedOperationException("Implement service logic");
